@@ -11,6 +11,7 @@ public abstract class SendMessageDelegate<T> implements JavaDelegate {
     private final Sender messageSender;
 
     protected SendMessageDelegate(final Sender sender) {
+        log.debug("\n\n\n{}", this.getClass().getSimpleName());
         this.messageSender = sender;
     }
 
@@ -18,7 +19,6 @@ public abstract class SendMessageDelegate<T> implements JavaDelegate {
     public void execute(DelegateExecution context) throws Exception {
         final Message<T> msg = makeMessage();
         messageSender.send(msg);
-        log.debug("\n---------------\nSender: content {} has been sent.\n", msg);
     }
 
     public abstract Message<T> makeMessage() throws ExecutionException, InterruptedException;

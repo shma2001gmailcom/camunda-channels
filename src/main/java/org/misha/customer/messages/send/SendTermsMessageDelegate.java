@@ -1,5 +1,6 @@
 package org.misha.customer.messages.send;
 
+import lombok.extern.slf4j.Slf4j;
 import org.misha.SendMessageDelegate;
 import org.misha.customer.TermsMessageContent;
 import org.misha.Message;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
+@Slf4j
 public class SendTermsMessageDelegate extends SendMessageDelegate<TermsMessageContent> {
     @Autowired
     TermsMessageSender messageSender;

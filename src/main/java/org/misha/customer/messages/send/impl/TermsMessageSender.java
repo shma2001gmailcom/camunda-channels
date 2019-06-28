@@ -19,6 +19,7 @@ public class TermsMessageSender implements Sender {
 
     public TermsMessageSender(@Qualifier("output") MessageChannel channel) {
         this.output = channel;
+        log.debug("channel: {} is {}", output.getClass(), output);
     }
 
     @Override
@@ -28,7 +29,7 @@ public class TermsMessageSender implements Sender {
 
     @Override
     public void send(Message<?> m) {
-        log.debug("\n\n\n\n supply async output1");
+        log.debug("\n\nSender: {};\nmessage: {}", this.getClass().getSimpleName(), m);
         supplyAsync(() -> {
             Sender.super.send(m);
             return null;

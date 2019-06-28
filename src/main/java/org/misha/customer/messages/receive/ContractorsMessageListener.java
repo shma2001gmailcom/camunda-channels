@@ -16,17 +16,13 @@ import org.springframework.stereotype.Component;
 @EnableBinding(Sink.class)
 @Slf4j
 class ContractorsMessageListener implements JavaDelegate {
-
     @StreamListener(target = Sink.INPUT, condition = "(headers['messageType']?:'').startsWith('Sum')")
     public void messageReceived(String messageJson) throws Exception {
         log.debug("\n\n---------------\n\nReceiver: json received={}", messageJson);
-        final TypeReference<Message<JsonNode>> typeRef = new TypeReference<Message<JsonNode>>() {
-        };
+        final TypeReference<Message<JsonNode>> typeRef = new TypeReference<Message<JsonNode>>() {};
         final Message<JsonNode> message = new ObjectMapper().readValue(messageJson, typeRef);
-        log.debug(
-                "\n\n---------------\n\nReceiver {}: messageType={}; traceId={}",
-                message.getMessageType(),
-                message.getTraceId());
+        log.debug("\n\n---------------\n\nReceiver: {}: messageType={}; traceId={}", this.getClass().getSimpleName(),
+                  message.getMessageType(), message.getTraceId());
     }
 
     @Override

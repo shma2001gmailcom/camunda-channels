@@ -28,7 +28,7 @@ public class SumMessageSender implements Sender {
 
     @Override
     public void send(Message<?> m) {
-        log.debug("\n\n\n\n supply async output");
+        log.debug("\n\nSender: {};\nmessage: {}", this.getClass().getSimpleName(), m);
         supplyAsync(() -> {
             Sender.super.send(m);
             return null;
