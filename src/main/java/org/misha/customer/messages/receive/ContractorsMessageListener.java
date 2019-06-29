@@ -12,17 +12,22 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component
 @EnableBinding(Sink.class)
 @Slf4j
 class ContractorsMessageListener implements JavaDelegate {
     @StreamListener(target = Sink.INPUT, condition = "(headers['messageType']?:'').startsWith('Sum')")
-    public void messageReceived(String messageJson) throws Exception {
+    public void messageReceived(String messageJson) throws IOException {
         log.debug("\n\n---------------\n\nReceiver: json received={}", messageJson);
         final TypeReference<Message<JsonNode>> typeRef = new TypeReference<Message<JsonNode>>() {};
         final Message<JsonNode> message = new ObjectMapper().readValue(messageJson, typeRef);
-        log.debug("\n\n---------------\n\nReceiver: {}: messageType={}; traceId={}", this.getClass().getSimpleName(),
-                  message.getMessageType(), message.getTraceId());
+        log.debug(
+                "\n\n---------------\n\nReceiver: {}: messageType={}; traceId={}",
+                this.getClass().getSimpleName(),
+                message.getMessageType(),
+                message.getTraceId());
     }
 
     @Override

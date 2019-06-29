@@ -5,7 +5,6 @@ import org.misha.SendMessageDelegate;
 import org.misha.customer.TermsMessageContent;
 import org.misha.Message;
 import org.misha.customer.messages.send.impl.TermsMessageSender;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -13,11 +12,11 @@ import java.util.UUID;
 @Component
 @Slf4j
 public class SendTermsMessageDelegate extends SendMessageDelegate<TermsMessageContent> {
-    @Autowired
-    TermsMessageSender messageSender;
+    private final TermsMessageSender messageSender;
 
-    public SendTermsMessageDelegate(TermsMessageSender messageSender) {
+    public SendTermsMessageDelegate(final TermsMessageSender messageSender) {
         super(messageSender);
+        this.messageSender = messageSender;
     }
 
     @Override

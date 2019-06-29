@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+cd ../target
+port=8090
+app=camunda-channels-0.0.1-SNAPSHOT
+x=`echo $(lsof -i :${port})`
+if [[ ! ${x} ]]; then
+    java -jar ${app}.jar
+    google-chrome-stable http://localhost:${port}
+else
+    echo "port already in use"
+    exit 1
+fi
+

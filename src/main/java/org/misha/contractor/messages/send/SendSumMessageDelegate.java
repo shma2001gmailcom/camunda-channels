@@ -7,7 +7,6 @@ import org.misha.SendMessageDelegate;
 import org.misha.contractor.Adder;
 import org.misha.contractor.SumMessageContent;
 import org.misha.contractor.messages.send.impl.SumMessageSender;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -15,14 +14,15 @@ import java.util.concurrent.ExecutionException;
 
 @Component
 @Slf4j
-public class SendSumMessageDelegate  extends SendMessageDelegate<SumMessageContent> {
-    @Autowired
-    SumMessageSender messageSender;
-    @Autowired
-    Adder adder;
+public class SendSumMessageDelegate extends SendMessageDelegate<SumMessageContent> {
+    private final SumMessageSender messageSender;
+    private final Adder adder;
 
-    public SendSumMessageDelegate(SumMessageSender messageSender) {
+    public SendSumMessageDelegate(final SumMessageSender messageSender, final Adder adder
+    ) {
         super(messageSender);
+        this.messageSender = messageSender;
+        this.adder = adder;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class SendSumMessageDelegate  extends SendMessageDelegate<SumMessageConte
         msg.setSender(messageSender.getClass().getSimpleName());
         SumMessageContent content = new SumMessageContent();
         content.setSum(adder.sum(100, 200).get());
-        log.debug("\n---------------\nSender: {};\nmessage {} has been sent.\n","SendSumMessageDelegate", msg);
+        log.debug("\n---------------\nSender: {};\nmessage {} has been sent.\n", getClass().getSimpleName(), msg);
         return msg;
     }
 

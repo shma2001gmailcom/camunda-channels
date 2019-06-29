@@ -15,6 +15,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -31,16 +32,19 @@ class CustomersMessageListener implements JavaDelegate {
     }
 
     @StreamListener(target = Sink.INPUT, condition = "(headers['messageType']?:'').startsWith('Terms')")
-    public void messageReceived(String messageJson) throws Exception {
+    public void messageReceived(String messageJson) throws IOException, ExecutionException, InterruptedException {
         log.debug("\n\n---------------\n\nReceiver: json received={}", messageJson);
-        final TypeReference<Message<TermsMessageContent>> typeRef =
-                new TypeReference<Message<TermsMessageContent>>() {};
+        final TypeReference<Message<TermsMessageContent>> typeRef = new TypeReference<Message<TermsMessageContent>>() {};
         final Message<TermsMessageContent> message = new ObjectMapper().readValue(messageJson, typeRef);
         final int left = message.getPayload().getLeft();
         final int right = message.getPayload().getRight();
         log.debug(
-                "\n\n---------------\n\nReceiver: {};\nmessageType: {};\ntraceId: {};\nleft term:  {};\nright term: " +
-                "{};", this.getClass().getSimpleName(), message.getMessageType(), message.getTraceId(), left, right);
+                "\n\n---------------\n\nReceiver: {};\nmessageType: {};\ntraceId: {};\nleft term:  {};\nright term: " + "{};",
+                this.getClass().getSimpleName(),
+                message.getMessageType(),
+                message.getTraceId(),
+                left,
+                right);
         final Message<SumMessageContent> msg = makeReplyMessage(message, adder.sum(left, right));
         sumMessageSender.send(msg);
     }
