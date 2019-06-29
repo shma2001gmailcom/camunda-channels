@@ -2,7 +2,7 @@ package org.misha.customer.messages.send;
 
 import lombok.extern.slf4j.Slf4j;
 import org.misha.SendMessageDelegate;
-import org.misha.customer.TermsMessageContent;
+import org.misha.customer.data.TermsMessageContent;
 import org.misha.Message;
 import org.misha.customer.messages.send.impl.TermsMessageSender;
 import org.springframework.stereotype.Component;

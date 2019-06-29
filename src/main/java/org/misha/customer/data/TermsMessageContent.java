@@ -1,4 +1,4 @@
-package org.misha.customer;
+package org.misha.customer.data;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
