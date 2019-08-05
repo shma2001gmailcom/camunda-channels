@@ -17,7 +17,7 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 public class TermsMessageSender implements Sender {
     private final MessageChannel output;
 
-    public TermsMessageSender(@Qualifier("output") MessageChannel channel) {
+    TermsMessageSender(@Qualifier("output") MessageChannel channel) {
         this.output = channel;
         log.debug("channel: {} is {}", output.getClass(), output);
     }
@@ -29,7 +29,7 @@ public class TermsMessageSender implements Sender {
 
     @Override
     public void send(Message<?> m) {
-        log.debug("\n\nSender: {};\nmessage: {}", this.getClass().getSimpleName(), m);
+        log.debug("\n\n---------------\n\nSender: {};\nmessage: {}", this.getClass().getSimpleName(), m);
         supplyAsync(() -> {
             Sender.super.send(m);
             return null;

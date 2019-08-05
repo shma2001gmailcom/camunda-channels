@@ -1,4 +1,4 @@
-package org.misha.contractor;
+package org.misha.contractor.service;
 
 import org.springframework.stereotype.Component;
 

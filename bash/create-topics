@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+export $(grep -v '^#' ./environment.properties | xargs)
+if [ ! "$(ps axf | grep kafka | grep -v grep)" ]; then
+    echo "Kafka server haven\'t been started yet." exit 1;
+fi
+./make-topic customer-to-contractor
+./make-topic contractor-to-customer

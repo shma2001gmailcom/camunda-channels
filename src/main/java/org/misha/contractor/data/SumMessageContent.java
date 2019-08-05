@@ -1,4 +1,4 @@
-package org.misha.contractor;
+package org.misha.contractor.data;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
