@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.misha.Message;
-import org.misha.contractor.Adder;
-import org.misha.contractor.SumMessageContent;
+import org.misha.contractor.service.Adder;
+import org.misha.contractor.data.SumMessageContent;
 import org.misha.contractor.messages.send.impl.SumMessageSender;
-import org.misha.customer.TermsMessageContent;
+import org.misha.customer.data.TermsMessageContent;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
@@ -32,7 +32,7 @@ class CustomersMessageListener implements JavaDelegate {
 
     @StreamListener(target = Sink.INPUT, condition = "(headers['messageType']?:'').startsWith('Terms')")
     public void messageReceived(String messageJson) throws Exception {
-        log.debug("\n\n---------------\n\nReceiver: {};\n json received={}", getClass().getSimpleName(), messageJson);
+        log.debug("\n\n---------------\n\nReceiver: json received={}", messageJson);
         final TypeReference<Message<TermsMessageContent>> typeRef =
                 new TypeReference<Message<TermsMessageContent>>() {};
         final Message<TermsMessageContent> message = new ObjectMapper().readValue(messageJson, typeRef);

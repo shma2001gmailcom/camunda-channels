@@ -4,10 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.misha.Message;
 import org.misha.SendMessageDelegate;
-import org.misha.contractor.Adder;
-import org.misha.contractor.SumMessageContent;
+import org.misha.contractor.service.Adder;
+import org.misha.contractor.data.SumMessageContent;
 import org.misha.contractor.messages.send.impl.SumMessageSender;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
