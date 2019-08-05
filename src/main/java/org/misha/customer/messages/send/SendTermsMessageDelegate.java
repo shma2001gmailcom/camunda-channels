@@ -13,11 +13,12 @@ import java.util.UUID;
 @Component
 @Slf4j
 public class SendTermsMessageDelegate extends SendMessageDelegate<TermsMessageContent> {
-    @Autowired
-    TermsMessageSender messageSender;
+    private final TermsMessageSender messageSender;
 
+    @Autowired
     public SendTermsMessageDelegate(TermsMessageSender messageSender) {
         super(messageSender);
+        this.messageSender = messageSender;
     }
 
     @Override

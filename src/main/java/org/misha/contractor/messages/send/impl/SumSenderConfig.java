@@ -14,7 +14,7 @@ class SumSenderConfig {
 
     @Bean
     SumMessageSender sumMessageSender() {
-        return new SumMessageSender(output());
+        return new SumMessageSender(output);
     }
 
     @Bean

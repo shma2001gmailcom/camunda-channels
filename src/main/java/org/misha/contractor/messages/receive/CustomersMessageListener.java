@@ -32,7 +32,7 @@ class CustomersMessageListener implements JavaDelegate {
 
     @StreamListener(target = Sink.INPUT, condition = "(headers['messageType']?:'').startsWith('Terms')")
     public void messageReceived(String messageJson) throws Exception {
-        log.debug("\n\n---------------\n\nReceiver: json received={}", messageJson);
+        log.debug("\n\n---------------\n\nReceiver: {};\n json received={}", getClass().getSimpleName(), messageJson);
         final TypeReference<Message<TermsMessageContent>> typeRef =
                 new TypeReference<Message<TermsMessageContent>>() {};
         final Message<TermsMessageContent> message = new ObjectMapper().readValue(messageJson, typeRef);

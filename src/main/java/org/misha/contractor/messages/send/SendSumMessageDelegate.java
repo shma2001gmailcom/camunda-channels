@@ -15,14 +15,14 @@ import java.util.concurrent.ExecutionException;
 
 @Component
 @Slf4j
-public class SendSumMessageDelegate  extends SendMessageDelegate<SumMessageContent> {
-    @Autowired
-    SumMessageSender messageSender;
-    @Autowired
-    Adder adder;
+public class SendSumMessageDelegate extends SendMessageDelegate<SumMessageContent> {
+    private final SumMessageSender messageSender;
+    private final Adder adder;
 
-    public SendSumMessageDelegate(SumMessageSender messageSender) {
+    public SendSumMessageDelegate(SumMessageSender messageSender, Adder adder) {
         super(messageSender);
+        this.messageSender = messageSender;
+        this.adder = adder;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class SendSumMessageDelegate  extends SendMessageDelegate<SumMessageConte
         msg.setSender(messageSender.getClass().getSimpleName());
         SumMessageContent content = new SumMessageContent();
         content.setSum(adder.sum(100, 200).get());
-        log.debug("\n---------------\nSender: {};\nmessage {} has been sent.\n","SendSumMessageDelegate", msg);
+        log.debug("\n---------------\nSender: {};\nmessage {} has been sent.\n", "SendSumMessageDelegate", msg);
         return msg;
     }
 
