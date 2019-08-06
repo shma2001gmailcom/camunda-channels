@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.ProcessEngines;
+import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.misha.Message;
@@ -11,6 +13,8 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 @EnableBinding(Sink.class)
@@ -26,7 +30,12 @@ class ContractorsMessageListener implements JavaDelegate {
     }
 
     @Override
-    public void execute(final DelegateExecution execution) throws Exception {
-        //make it possible to start from ui
+    public void execute(DelegateExecution execution) throws Exception {
+        RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+        String processId = execution.getProcessInstance().getId();
+        Map<String, Object> globalVars = Map.class.cast(runtimeService.getVariable(processId, "globalVars"));
+        globalVars.put("procId", processId);
+        globalVars.put("msg", globalVars.get("msg") + "Changed_by+" + getClass().getSimpleName());
+        log.debug("\n\n\n\n {}", runtimeService.getVariable(processId, "globalVars"));
     }
 }

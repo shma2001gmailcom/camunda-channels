@@ -3,18 +3,23 @@ package org.misha.contractor.messages.receive;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.camunda.bpm.engine.ProcessEngines;
+import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.misha.Message;
-import org.misha.contractor.service.Adder;
 import org.misha.contractor.data.SumMessageContent;
 import org.misha.contractor.messages.send.impl.SumMessageSender;
+import org.misha.contractor.service.Adder;
 import org.misha.customer.data.TermsMessageContent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.cloud.stream.messaging.Sink;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -24,6 +29,7 @@ import java.util.concurrent.Future;
 class CustomersMessageListener implements JavaDelegate {
     private final Adder adder;
     private final SumMessageSender sumMessageSender;
+    private static final Logger log = LoggerFactory.getLogger(CustomersMessageListener.class);
 
     CustomersMessageListener(Adder adder, SumMessageSender sumMessageSender) {
         this.adder = adder;
@@ -46,8 +52,8 @@ class CustomersMessageListener implements JavaDelegate {
     }
 
     private Message<SumMessageContent> makeReplyMessage(Message<TermsMessageContent> message,
-                                                        Future<Integer> calculationPlan
-    ) throws ExecutionException, InterruptedException {
+                                                        Future<Integer> calculationPlan)
+    throws ExecutionException, InterruptedException {
         final Message<SumMessageContent> msg = new Message<>();
         msg.setMessageType("SumMessageContent");
         msg.setCorrelationId(message.getCorrelationId());//populate correlation for call chain
@@ -61,8 +67,12 @@ class CustomersMessageListener implements JavaDelegate {
     }
 
     @Override
-    public void execute(final DelegateExecution execution) throws Exception {
-        log.debug("CustomersMessageListener");
+    public void execute(DelegateExecution execution) throws Exception {
+        RuntimeService runtimeService = ProcessEngines.getDefaultProcessEngine().getRuntimeService();
+        String processId = execution.getProcessInstance().getId();
+        Map<String, Object> globalVars = (Map<String, Object>) runtimeService.getVariable(processId, "globalVars");
+        globalVars.put("msg", globalVars.get("msg") + "Changed_by+" + getClass().getSimpleName());
+        log.debug("\n\n\n\n {}", runtimeService.getVariable(processId, "globalVars"));
     }
 }
 

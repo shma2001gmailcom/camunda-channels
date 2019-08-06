@@ -8,10 +8,8 @@ import org.springframework.messaging.MessageChannel;
 
 @Configuration
 class TermsSenderConfig {
-
     @Bean
-    @Autowired
-    TermsMessageSender messageSender(final @Qualifier("output") MessageChannel output) {
+    TermsMessageSender messageSender(final @Autowired @Qualifier("output") MessageChannel output) {
         return new TermsMessageSender(output);
     }
 }
