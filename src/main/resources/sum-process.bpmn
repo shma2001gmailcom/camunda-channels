@@ -27,11 +27,11 @@
       <bpmn:incoming>SequenceFlow_0ne665n</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1rzvaxv</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_1lairas" name="Customer sends message with terms to contracter" camunda:delegateExpression="#{sendTermsMessageDelegate}">
+    <bpmn:serviceTask id="Task_1lairas" name="Customer sends message with terms to contracter" camunda:delegateExpression="#{consumerSendsTermsMessageDelegate}">
       <bpmn:incoming>SequenceFlow_0fzyzk4</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1qmccay</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Task_1mypfq5" name="Contractor receives message with terms" camunda:delegateExpression="#{contractorReceives}">
+    <bpmn:serviceTask id="Task_1mypfq5" name="Contractor receives message with terms" camunda:delegateExpression="#{contractorReceivesResultDelegate}">
       <bpmn:incoming>SequenceFlow_1qmccay</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0ne665n</bpmn:outgoing>
     </bpmn:serviceTask>
